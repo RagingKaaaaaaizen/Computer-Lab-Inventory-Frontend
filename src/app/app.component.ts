@@ -4,7 +4,7 @@ import { AccountService } from './_services';
 import { Account, Role } from './_models';
 
 @Component({ 
-  selector: 'app', 
+  selector: 'app-root', 
   templateUrl: 'app.component.html',
   styles: [`
     .app-container {

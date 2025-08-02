@@ -113,7 +113,7 @@ import { WorkflowStatus } from '@app/_models/workflow-type.enum';
 })
 export class WorkflowModalComponent implements OnInit {
     @Input() employeeId: string;
-    @Output() close = new EventEmitter<void>();
+    @Output() closeModal = new EventEmitter<void>();
 
     workflows: Workflow[] = [];
     showForm = false;
