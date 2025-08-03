@@ -14,7 +14,7 @@ import { Department } from '@app/_models/department';
 })
 export class TransferModalComponent implements OnInit {
   @Input() employee: Employee;
-  @Output() close = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
   @Output() transferComplete = new EventEmitter<void>();
 
   form: FormGroup;

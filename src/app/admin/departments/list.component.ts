@@ -4,7 +4,7 @@ import { DepartmentService, EmployeeService } from '@app/_services'
 import { first } from "rxjs/operators";
 
 @Component({ templateUrl: 'list.component.html'})
-export class ListComponent{
+export class ListComponent implements OnInit {
   departments: any[]
   employeeCounts: { [key: string]: number } = {};
 
