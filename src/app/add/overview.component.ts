@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { CategoryService } from '../_services/category.service';
 import { ItemService } from '../_services/item.service';
@@ -325,19 +325,17 @@ import { AlertService } from '../_services/alert.service';
   `]
 })
 export class OverviewComponent implements OnInit {
+  private categoryService = inject(CategoryService);
+  private itemService = inject(ItemService);
+  private brandService = inject(BrandService);
+  private storageLocationService = inject(StorageLocationService);
+  private alertService = inject(AlertService);
+
   categories: any[] = [];
   items: any[] = [];
   brands: any[] = [];
   storageLocations: any[] = [];
   loading = false;
-
-  constructor(
-    private categoryService: CategoryService,
-    private itemService: ItemService,
-    private brandService: BrandService,
-    private storageLocationService: StorageLocationService,
-    private alertService: AlertService
-  ) {}
 
   ngOnInit(): void {
     this.loadOverview();

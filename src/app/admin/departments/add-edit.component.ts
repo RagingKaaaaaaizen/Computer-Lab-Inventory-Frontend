@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { first } from "rxjs/operators";
@@ -7,19 +7,17 @@ import { DepartmentService, AlertService } from '@app/_services';
 
 @Component({ templateUrl: 'add-edit.component.html'})
 export class AddEditComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private departmentService = inject(DepartmentService);
+  private alertService = inject(AlertService);
+
   form: UntypedFormGroup
   id: string
   isAddMode: boolean
   loading = false
   submitted = false
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private departmentService: DepartmentService,
-    private alertService: AlertService
-  ){ }
 
   ngOnInit(){
     this.id = this.route.snapshot.params['id']

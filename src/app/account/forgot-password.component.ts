@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { first, finalize } from 'rxjs/operators';
 
@@ -208,17 +208,15 @@ import { AccountService, AlertService } from '@app/_services';
     `]
 })
 export class ForgotPasswordComponent implements OnInit {
+    private formBuilder = inject(UntypedFormBuilder);
+    private accountService = inject(AccountService);
+    private alertService = inject(AlertService);
+
     form: UntypedFormGroup;
     loading = false;
     submitted = false;
     success = '';
     error = '';
-
-    constructor(
-        private formBuilder: UntypedFormBuilder,
-        private accountService: AccountService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@app/_services';
 import { Role } from '@app/_models';
@@ -477,15 +477,15 @@ import { Role } from '@app/_models';
   `]
 })
 export class NavComponent {
+  private router = inject(Router);
+  accountService = inject(AccountService);
+
   Role = Role;
   isCollapsed = false;
   isMobile = false;
   isMobileOpen = false;
 
-  constructor(
-    private router: Router,
-    public accountService: AccountService
-  ) {
+  constructor() {
     this.checkScreenSize();
     window.addEventListener('resize', () => this.checkScreenSize());
   }

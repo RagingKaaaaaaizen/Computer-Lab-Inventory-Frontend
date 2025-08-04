@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ItemService } from '../../_services/item.service';
@@ -208,19 +208,17 @@ import { AlertService } from '../../_services/alert.service';
   `]
 })
 export class ItemAddComponent implements OnInit {
+  private itemService = inject(ItemService);
+  private categoryService = inject(CategoryService);
+  private brandService = inject(BrandService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
+
   model: any = {};
   categories: any[] = [];
   brands: any[] = [];
   loading = false;
   submitted = false;
-
-  constructor(
-    private itemService: ItemService,
-    private categoryService: CategoryService,
-    private brandService: BrandService,
-    private alertService: AlertService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.loadCategories();
