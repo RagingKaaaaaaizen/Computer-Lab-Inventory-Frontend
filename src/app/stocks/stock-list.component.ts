@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -303,6 +303,15 @@ import { Role } from '@app/_models';
   `]
 })
 export class StockListComponent implements OnInit {
+  private router = inject(Router);
+  private stockService = inject(StockService);
+  private itemService = inject(ItemService);
+  private categoryService = inject(CategoryService);
+  private brandService = inject(BrandService);
+  private locationService = inject(StorageLocationService);
+  private alertService = inject(AlertService);
+  accountService = inject(AccountService);
+
   Role = Role;
   stocks: any[] = [];
   items: any[] = [];
@@ -316,17 +325,6 @@ export class StockListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   Math = Math;
-
-  constructor(
-    private router: Router,
-    private stockService: StockService,
-    private itemService: ItemService,
-    private categoryService: CategoryService,
-    private brandService: BrandService,
-    private locationService: StorageLocationService,
-    private alertService: AlertService,
-    public accountService: AccountService
-  ) { }
 
   ngOnInit() {
     this.loadData();

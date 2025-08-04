@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { WorkflowService } from '@app/_services/workflow.service';
 import { Workflow } from '@app/_models/workflow';
 import { AlertService } from '@app/_services/alert.service';
@@ -112,17 +112,15 @@ import { WorkflowStatus } from '@app/_models/workflow-type.enum';
     `]
 })
 export class WorkflowModalComponent implements OnInit {
+    private workflowService = inject(WorkflowService);
+    private alertService = inject(AlertService);
+
     @Input() employeeId: string;
     @Output() closeModal = new EventEmitter<void>();
 
     workflows: Workflow[] = [];
     showForm = false;
     selectedWorkflow: Workflow;
-
-    constructor(
-        private workflowService: WorkflowService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         console.log('WorkflowModalComponent initialized with employeeId:', this.employeeId);

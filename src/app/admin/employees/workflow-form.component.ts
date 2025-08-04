@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WorkflowService } from '@app/_services/workflow.service';
 import { AlertService } from '@app/_services/alert.service';
@@ -95,6 +95,11 @@ import { AccountService } from '@app/_services/account.service';
     `]
 })
 export class WorkflowFormComponent implements OnInit {
+    private formBuilder = inject(FormBuilder);
+    private workflowService = inject(WorkflowService);
+    private alertService = inject(AlertService);
+    private accountService = inject(AccountService);
+
     @Input() employeeId: string;
     @Input() workflow: Workflow;
     @Output() saved = new EventEmitter<Workflow>();
@@ -106,13 +111,6 @@ export class WorkflowFormComponent implements OnInit {
     isEditMode = false;
     workflowTypes = Object.values(WorkflowType);
     workflowStatuses = Object.values(WorkflowStatus);
-
-    constructor(
-        private formBuilder: FormBuilder,
-        private workflowService: WorkflowService,
-        private alertService: AlertService,
-        private accountService: AccountService
-    ) { }
 
     ngOnInit() {
         console.log('WorkflowFormComponent initialized:', { employeeId: this.employeeId, workflow: this.workflow });

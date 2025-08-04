@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DisposeService, Dispose } from '../_services/dispose.service';
@@ -11,6 +11,14 @@ import { AlertService } from '../_services/alert.service';
   templateUrl: './dispose.component.html'
 })
 export class DisposeComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private disposeService = inject(DisposeService);
+  private itemService = inject(ItemService);
+  private locationService = inject(StorageLocationService);
+  private alertService = inject(AlertService);
+
   form: FormGroup;
   items: any[] = [];
   locations: any[] = [];
@@ -18,16 +26,6 @@ export class DisposeComponent implements OnInit {
   loading = false;
   submitted = false;
   error = '';
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private disposeService: DisposeService,
-    private itemService: ItemService,
-    private locationService: StorageLocationService,
-    private alertService: AlertService
-  ) {}
 
   ngOnInit(): void {
     this.initForm();

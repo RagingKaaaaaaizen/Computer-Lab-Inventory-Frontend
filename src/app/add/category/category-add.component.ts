@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { CategoryService } from '../../_services/category.service';
@@ -238,15 +238,13 @@ import { AlertService } from '../../_services/alert.service';
   `]
 })
 export class CategoryAddComponent {
+  private categoryService = inject(CategoryService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
+
   model: any = {};
   loading = false;
   submitted = false;
-
-  constructor(
-    private categoryService: CategoryService,
-    private alertService: AlertService,
-    private router: Router
-  ) {}
 
   saveCategory() {
     this.submitted = true;

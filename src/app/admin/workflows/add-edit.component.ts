@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -13,21 +13,19 @@ import { Employee } from '@app/_models/employee';
     templateUrl: './add-edit.component.html'
 })
 export class AddEditComponent implements OnInit {
+    private formBuilder = inject(FormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private workflowService = inject(WorkflowService);
+    private employeeService = inject(EmployeeService);
+    private alertService = inject(AlertService);
+
     form!: FormGroup;
     id: string;
     isAddMode: boolean;
     loading = false;
     submitted = false;
     employees: Employee[] = [];
-
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private workflowService: WorkflowService,
-        private employeeService: EmployeeService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];

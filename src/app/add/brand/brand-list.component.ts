@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { BrandService } from '../../_services/brand.service';
@@ -308,6 +308,12 @@ import { AccountService } from '../../_services/account.service';
   `]
 })
 export class BrandListComponent implements OnInit {
+  private brandService = inject(BrandService);
+  private itemService = inject(ItemService);
+  private alertService = inject(AlertService);
+  accountService = inject(AccountService);
+  private router = inject(Router);
+
   Role = Role;
   brands: any[] = [];
   filteredBrands: any[] = [];
@@ -318,14 +324,6 @@ export class BrandListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   Math = Math;
-
-  constructor(
-    private brandService: BrandService,
-    private itemService: ItemService,
-    private alertService: AlertService,
-    public accountService: AccountService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.loadData();

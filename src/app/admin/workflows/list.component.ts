@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { WorkflowService } from '@app/_services/workflow.service';
 import { Workflow } from '@app/_models/workflow';
 import { AlertService } from '@app/_services/alert.service';
@@ -8,13 +8,11 @@ import { AlertService } from '@app/_services/alert.service';
     templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit {
+    private workflowService = inject(WorkflowService);
+    private alertService = inject(AlertService);
+
     workflows: Workflow[] = [];
     isDeleting = false;
-
-    constructor(
-        private workflowService: WorkflowService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         this.loadWorkflows();

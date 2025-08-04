@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 
 import { AccountService } from './_services';
 import { Account, Role } from './_models';
@@ -333,10 +333,12 @@ import { Account, Role } from './_models';
   `]
 })
 export class AppComponent {
+    private accountService = inject(AccountService);
+
     Role = Role;
     account: Account;
 
-    constructor(private accountService: AccountService) {
+    constructor() {
         this.accountService.account.subscribe(x => this.account = x);
     }
     

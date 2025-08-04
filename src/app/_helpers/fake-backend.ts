@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
@@ -26,8 +26,8 @@ let workflows: any[] = storedWorkflows ? JSON.parse(storedWorkflows) : [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
+    private alertService = inject(AlertService);
 
-    constructor(private alertService: AlertService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const { url, method, headers, body } = request;

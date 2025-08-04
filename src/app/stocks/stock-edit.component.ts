@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StockService } from '../_services/stock.service';
 import { ItemService } from '../_services/item.service';
@@ -10,6 +10,12 @@ import { Stock } from '../_models/stock';
   templateUrl: './stock-edit.component.html'
 })
 export class StockEditComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private stockService = inject(StockService);
+  private itemService = inject(ItemService);
+  private locationService = inject(StorageLocationService);
+
   stock: Stock = new Stock();
   isEdit = false;
   isViewMode = false;
@@ -18,14 +24,6 @@ export class StockEditComponent implements OnInit {
   loading = false;
   error = '';
   submitted = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private stockService: StockService,
-    private itemService: ItemService,
-    private locationService: StorageLocationService
-  ) {}
 
   ngOnInit(): void {
     this.isViewMode = this.router.url.includes('/view/');

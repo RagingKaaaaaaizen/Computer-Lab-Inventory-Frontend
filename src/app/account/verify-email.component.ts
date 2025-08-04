@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -11,15 +11,13 @@ enum EmailStatus {
 
 @Component({ templateUrl: 'verify-email.component.html' })
 export class VerifyEmailComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private accountService = inject(AccountService);
+    private alertService = inject(AlertService);
+
     EmailStatus = EmailStatus;
     emailStatus = EmailStatus.Verifying;
-
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private accountService: AccountService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         const token = this.route.snapshot.queryParams['token'];

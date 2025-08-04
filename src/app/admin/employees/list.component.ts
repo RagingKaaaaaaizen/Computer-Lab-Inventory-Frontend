@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { DatePipe } from '@angular/common';
 import { EmployeeService } from '@app/_services'
 import { first } from "rxjs/operators";
@@ -8,17 +8,15 @@ import { Employee } from '@app/_models';
 
 @Component({ templateUrl: 'list.component.html', providers: [DatePipe]})
 export class ListComponent implements OnInit {
+  private router = inject(Router);
+  private employeeService = inject(EmployeeService);
+  private alertService = inject(AlertService);
+
   employees: Employee[] = [];
   isDeleting = false;
   showTransferModal = false;
   selectedEmployee: Employee;
   showWorkflowModal = false;
-
-  constructor(
-    private router: Router,
-    private employeeService: EmployeeService,
-    private alertService: AlertService
-  ){ }
 
   ngOnInit() {
     this.loadEmployees();
