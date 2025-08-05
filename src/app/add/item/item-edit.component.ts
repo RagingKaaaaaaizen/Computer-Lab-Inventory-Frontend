@@ -131,6 +131,18 @@ import { AlertService } from '../../_services/alert.service';
       background-color: #fff;
     }
 
+    /* Ensure select elements have consistent height */
+    select.form-control {
+      height: 48px;
+      line-height: 1.5;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 16px 12px;
+      padding-right: 40px;
+    }
+
     .form-control:focus {
       border-color: #667eea;
       box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
