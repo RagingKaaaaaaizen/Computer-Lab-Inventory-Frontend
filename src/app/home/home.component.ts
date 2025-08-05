@@ -1,5 +1,6 @@
 ﻿import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AccountService } from '@app/_services';
 import { Role } from '@app/_models';
@@ -7,7 +8,7 @@ import { Role } from '@app/_models';
 @Component({ 
   templateUrl: 'home.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   styles: [`
     .dashboard-container {
       padding: 20px 0;
