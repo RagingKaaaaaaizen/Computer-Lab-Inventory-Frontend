@@ -241,6 +241,41 @@ import { AlertService } from '../../_services/alert.service';
       margin-left: 4px;
     }
 
+    /* Autocomplete Styles */
+    .autocomplete-container {
+      position: relative;
+    }
+
+    .suggestions-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 2px solid #e9ecef;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .suggestion-item {
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      border-bottom: 1px solid #f8f9fa;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
     /* Modal Styles */
     .modal-overlay {
       position: fixed;
@@ -363,6 +398,13 @@ import { AlertService } from '../../_services/alert.service';
         justify-content: center;
       }
 
+      .suggestions-dropdown {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        max-height: 150px;
+      }
+
       .modal-container {
         width: 95%;
         margin: 10px;
@@ -399,6 +441,12 @@ export class ItemAddComponent implements OnInit {
   loading = false;
   submitted = false;
 
+  // Autocomplete properties
+  filteredCategories: any[] = [];
+  filteredBrands: any[] = [];
+  showCategorySuggestions = false;
+  showBrandSuggestions = false;
+
   // Quick Add Modal Properties
   showQuickAddModal = false;
   quickAddType: 'category' | 'brand' | 'location' | null = null;
@@ -417,6 +465,7 @@ export class ItemAddComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.categories = data;
+          this.filteredCategories = data;
         },
         error: (err) => {
           console.error('Failed to load categories', err);
@@ -431,6 +480,7 @@ export class ItemAddComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.brands = data;
+          this.filteredBrands = data;
         },
         error: (err) => {
           console.error('Failed to load brands', err);
@@ -453,31 +503,117 @@ export class ItemAddComponent implements OnInit {
       });
   }
 
-  saveItem() {
+  // Autocomplete Methods
+  onCategoryInput(event: any) {
+    const value = event.target.value.toLowerCase();
+    this.filteredCategories = this.categories.filter(category =>
+      category.name.toLowerCase().includes(value)
+    );
+    this.showCategorySuggestions = true;
+  }
+
+  onBrandInput(event: any) {
+    const value = event.target.value.toLowerCase();
+    this.filteredBrands = this.brands.filter(brand =>
+      brand.name.toLowerCase().includes(value)
+    );
+    this.showBrandSuggestions = true;
+  }
+
+  selectCategory(category: any) {
+    this.model.categoryName = category.name;
+    this.model.categoryId = category.id;
+    this.showCategorySuggestions = false;
+  }
+
+  selectBrand(brand: any) {
+    this.model.brandName = brand.name;
+    this.model.brandId = brand.id;
+    this.showBrandSuggestions = false;
+  }
+
+  hideCategorySuggestions() {
+    setTimeout(() => {
+      this.showCategorySuggestions = false;
+    }, 200);
+  }
+
+  hideBrandSuggestions() {
+    setTimeout(() => {
+      this.showBrandSuggestions = false;
+    }, 200);
+  }
+
+  async saveItem() {
     this.submitted = true;
     this.loading = true;
 
     console.log('Submitting payload:', this.model);
 
-    if (!this.model.name || !this.model.categoryId || !this.model.brandId) {
+    if (!this.model.name || !this.model.categoryName || !this.model.brandName) {
       this.alertService.error('Item name, category, and brand are required');
       this.loading = false;
       return;
     }
 
-    this.itemService.create(this.model)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.alertService.success('Item saved successfully!');
-          this.router.navigate(['/add/item']);
-        },
-        error: (err) => {
-          console.error(err);
-          this.alertService.error('Failed to save item');
-          this.loading = false;
+    try {
+      // Find or create category
+      let categoryId = this.model.categoryId;
+      if (!categoryId) {
+        const existingCategory = this.categories.find(cat => 
+          cat.name.toLowerCase() === this.model.categoryName.toLowerCase()
+        );
+        
+        if (existingCategory) {
+          categoryId = existingCategory.id;
+        } else {
+          // Create new category
+          const newCategory = await this.categoryService.create({
+            name: this.model.categoryName,
+            description: ''
+          }).pipe(first()).toPromise();
+          categoryId = newCategory.id;
+          this.categories.push(newCategory);
+          this.filteredCategories = this.categories;
         }
-      });
+      }
+
+      // Find or create brand
+      let brandId = this.model.brandId;
+      if (!brandId) {
+        const existingBrand = this.brands.find(brand => 
+          brand.name.toLowerCase() === this.model.brandName.toLowerCase()
+        );
+        
+        if (existingBrand) {
+          brandId = existingBrand.id;
+        } else {
+          // Create new brand
+          const newBrand = await this.brandService.create({
+            name: this.model.brandName,
+            description: ''
+          }).pipe(first()).toPromise();
+          brandId = newBrand.id;
+          this.brands.push(newBrand);
+          this.filteredBrands = this.brands;
+        }
+      }
+
+      // Create item with resolved IDs
+      const itemData = {
+        ...this.model,
+        categoryId: categoryId,
+        brandId: brandId
+      };
+
+      await this.itemService.create(itemData).pipe(first()).toPromise();
+      this.alertService.success('Item saved successfully!');
+      this.router.navigate(['/add/item']);
+    } catch (error) {
+      console.error('Error saving item:', error);
+      this.alertService.error('Failed to save item');
+      this.loading = false;
+    }
   }
 
   // Quick Add Modal Methods

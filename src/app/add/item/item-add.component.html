@@ -49,50 +49,105 @@
 
                         <!-- Category and Brand Row -->
                         <div class="form-row">
-                            <!-- Select Category -->
+                            <!-- Category Autocomplete -->
                             <div class="form-group col-md-6">
                                 <label class="form-label">
                                     <i class="fas fa-folder"></i>
                                     Category
+                                    <span class="required-indicator">*</span>
                                 </label>
-                                <select
-                                    class="form-control"
-                                    [(ngModel)]="model.categoryId"
-                                    name="categoryId"
-                                    required
-                                    [ngClass]="{ 'is-invalid': submitted && !model.categoryId }"
-                                >
-                                    <option value="" disabled>Select Category</option>
-                                    <option *ngFor="let category of categories" [value]="category.id">
-                                        {{ category.name }}
-                                    </option>
-                                </select>
-                                <div class="invalid-feedback" *ngIf="submitted && !model.categoryId">
+                                <div class="autocomplete-container">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [(ngModel)]="model.categoryName"
+                                        name="categoryName"
+                                        placeholder="Enter or select category"
+                                        required
+                                        (input)="onCategoryInput($event)"
+                                        (focus)="showCategorySuggestions = true"
+                                        (blur)="hideCategorySuggestions()"
+                                        [ngClass]="{ 'is-invalid': submitted && !model.categoryName }"
+                                        autocomplete="off"
+                                    />
+                                    <!-- Category Suggestions -->
+                                    <div class="suggestions-dropdown" *ngIf="showCategorySuggestions && filteredCategories.length > 0">
+                                        <div 
+                                            class="suggestion-item"
+                                            *ngFor="let category of filteredCategories"
+                                            (mousedown)="selectCategory(category)"
+                                        >
+                                            {{ category.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback" *ngIf="submitted && !model.categoryName">
                                     Category is required
                                 </div>
                             </div>
 
-                            <!-- Select Brand -->
+                            <!-- Brand Autocomplete -->
                             <div class="form-group col-md-6">
                                 <label class="form-label">
                                     <i class="fas fa-trademark"></i>
                                     Brand
+                                    <span class="required-indicator">*</span>
                                 </label>
-                                <select
-                                    class="form-control"
-                                    [(ngModel)]="model.brandId"
-                                    name="brandId"
-                                    required
-                                    [ngClass]="{ 'is-invalid': submitted && !model.brandId }"
-                                >
-                                    <option value="" disabled>Select Brand</option>
-                                    <option *ngFor="let brand of brands" [value]="brand.id">
-                                        {{ brand.name }}
-                                    </option>
-                                </select>
-                                <div class="invalid-feedback" *ngIf="submitted && !model.brandId">
+                                <div class="autocomplete-container">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [(ngModel)]="model.brandName"
+                                        name="brandName"
+                                        placeholder="Enter or select brand"
+                                        required
+                                        (input)="onBrandInput($event)"
+                                        (focus)="showBrandSuggestions = true"
+                                        (blur)="hideBrandSuggestions()"
+                                        [ngClass]="{ 'is-invalid': submitted && !model.brandName }"
+                                        autocomplete="off"
+                                    />
+                                    <!-- Brand Suggestions -->
+                                    <div class="suggestions-dropdown" *ngIf="showBrandSuggestions && filteredBrands.length > 0">
+                                        <div 
+                                            class="suggestion-item"
+                                            *ngFor="let brand of filteredBrands"
+                                            (mousedown)="selectBrand(brand)"
+                                        >
+                                            {{ brand.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback" *ngIf="submitted && !model.brandName">
                                     Brand is required
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Storage Location Row -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Storage Location
+                            </label>
+                            <div class="input-with-action">
+                                <select
+                                    class="form-control"
+                                    [(ngModel)]="model.storageLocationId"
+                                    name="storageLocationId"
+                                >
+                                    <option value="">Select Storage Location (Optional)</option>
+                                    <option *ngFor="let location of storageLocations" [value]="location.id">
+                                        {{ location.name }} - {{ location.description }}
+                                    </option>
+                                </select>
+                                <button type="button" 
+                                        class="btn btn-outline-primary btn-sm quick-add-btn"
+                                        (click)="openQuickAddModal('location')"
+                                        [attr.aria-label]="'Add new storage location'"
+                                        title="Add New Storage Location">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -126,6 +181,160 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Add Modals -->
+<!-- Category Quick Add Modal -->
+<div class="modal-overlay" *ngIf="showQuickAddModal && quickAddType === 'category'" (click)="closeQuickAddModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4><i class="fas fa-folder"></i> Add New Category</h4>
+            <button type="button" class="btn-close" (click)="closeQuickAddModal()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #quickCategoryForm="ngForm" (ngSubmit)="saveQuickAdd(quickCategoryForm)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Category Name
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           [(ngModel)]="quickAddData.name" 
+                           name="name" 
+                           placeholder="Enter category name"
+                           required
+                           #nameInput>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-align-left"></i>
+                        Description
+                    </label>
+                    <textarea class="form-control" 
+                              [(ngModel)]="quickAddData.description" 
+                              name="description" 
+                              placeholder="Enter category description (optional)"
+                              rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline-secondary" (click)="closeQuickAddModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="quickAddLoading || !nameInput.valid">
+                        <span *ngIf="quickAddLoading" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!quickAddLoading" class="fas fa-save me-2"></i>
+                        {{ quickAddLoading ? 'Adding...' : 'Add Category' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Brand Quick Add Modal -->
+<div class="modal-overlay" *ngIf="showQuickAddModal && quickAddType === 'brand'" (click)="closeQuickAddModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4><i class="fas fa-trademark"></i> Add New Brand</h4>
+            <button type="button" class="btn-close" (click)="closeQuickAddModal()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #quickBrandForm="ngForm" (ngSubmit)="saveQuickAdd(quickBrandForm)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Brand Name
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           [(ngModel)]="quickAddData.name" 
+                           name="name" 
+                           placeholder="Enter brand name"
+                           required
+                           #brandNameInput>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-align-left"></i>
+                        Description
+                    </label>
+                    <textarea class="form-control" 
+                              [(ngModel)]="quickAddData.description" 
+                              name="description" 
+                              placeholder="Enter brand description (optional)"
+                              rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline-secondary" (click)="closeQuickAddModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="quickAddLoading || !brandNameInput.valid">
+                        <span *ngIf="quickAddLoading" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!quickAddLoading" class="fas fa-save me-2"></i>
+                        {{ quickAddLoading ? 'Adding...' : 'Add Brand' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Storage Location Quick Add Modal -->
+<div class="modal-overlay" *ngIf="showQuickAddModal && quickAddType === 'location'" (click)="closeQuickAddModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4><i class="fas fa-map-marker-alt"></i> Add New Storage Location</h4>
+            <button type="button" class="btn-close" (click)="closeQuickAddModal()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #quickLocationForm="ngForm" (ngSubmit)="saveQuickAdd(quickLocationForm)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Location Name
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           [(ngModel)]="quickAddData.name" 
+                           name="name" 
+                           placeholder="Enter location name"
+                           required
+                           #locationNameInput>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-align-left"></i>
+                        Description
+                    </label>
+                    <textarea class="form-control" 
+                              [(ngModel)]="quickAddData.description" 
+                              name="description" 
+                              placeholder="Enter location description"
+                              rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline-secondary" (click)="closeQuickAddModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="quickAddLoading || !locationNameInput.valid">
+                        <span *ngIf="quickAddLoading" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!quickAddLoading" class="fas fa-save me-2"></i>
+                        {{ quickAddLoading ? 'Adding...' : 'Add Location' }}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

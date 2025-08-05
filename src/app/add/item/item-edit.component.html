@@ -48,46 +48,72 @@
 
                         <!-- Category and Brand Row -->
                         <div class="form-row">
-                            <!-- Select Category -->
+                            <!-- Category Autocomplete -->
                             <div class="form-group col-md-6">
                                 <label class="form-label">
                                     <i class="fas fa-folder"></i>
                                     Category
                                 </label>
-                                <select
-                                    class="form-control"
-                                    formControlName="categoryId"
-                                    [disabled]="isViewMode"
-                                    [ngClass]="{ 'is-invalid': form.get('categoryId')?.invalid && form.get('categoryId')?.touched }"
-                                >
-                                    <option value="">Select Category</option>
-                                    <option *ngFor="let cat of categories" [value]="cat.id">
-                                        {{ cat.name }}
-                                    </option>
-                                </select>
-                                <div class="invalid-feedback" *ngIf="form.get('categoryId')?.invalid && form.get('categoryId')?.touched">
+                                <div class="autocomplete-container">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="categoryName"
+                                        placeholder="Enter or select category"
+                                        [readonly]="isViewMode"
+                                        (input)="onCategoryInput($event)"
+                                        (focus)="showCategorySuggestions = !isViewMode"
+                                        (blur)="hideCategorySuggestions()"
+                                        [ngClass]="{ 'is-invalid': form.get('categoryName')?.invalid && form.get('categoryName')?.touched }"
+                                        autocomplete="off"
+                                    />
+                                    <!-- Category Suggestions -->
+                                    <div class="suggestions-dropdown" *ngIf="showCategorySuggestions && filteredCategories.length > 0 && !isViewMode">
+                                        <div 
+                                            class="suggestion-item"
+                                            *ngFor="let category of filteredCategories"
+                                            (mousedown)="selectCategory(category)"
+                                        >
+                                            {{ category.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback" *ngIf="form.get('categoryName')?.invalid && form.get('categoryName')?.touched">
                                     Category is required
                                 </div>
                             </div>
 
-                            <!-- Select Brand -->
+                            <!-- Brand Autocomplete -->
                             <div class="form-group col-md-6">
                                 <label class="form-label">
                                     <i class="fas fa-trademark"></i>
                                     Brand
                                 </label>
-                                <select
-                                    class="form-control"
-                                    formControlName="brandId"
-                                    [disabled]="isViewMode"
-                                    [ngClass]="{ 'is-invalid': form.get('brandId')?.invalid && form.get('brandId')?.touched }"
-                                >
-                                    <option value="">Select Brand</option>
-                                    <option *ngFor="let brand of brands" [value]="brand.id">
-                                        {{ brand.name }}
-                                    </option>
-                                </select>
-                                <div class="invalid-feedback" *ngIf="form.get('brandId')?.invalid && form.get('brandId')?.touched">
+                                <div class="autocomplete-container">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="brandName"
+                                        placeholder="Enter or select brand"
+                                        [readonly]="isViewMode"
+                                        (input)="onBrandInput($event)"
+                                        (focus)="showBrandSuggestions = !isViewMode"
+                                        (blur)="hideBrandSuggestions()"
+                                        [ngClass]="{ 'is-invalid': form.get('brandName')?.invalid && form.get('brandName')?.touched }"
+                                        autocomplete="off"
+                                    />
+                                    <!-- Brand Suggestions -->
+                                    <div class="suggestions-dropdown" *ngIf="showBrandSuggestions && filteredBrands.length > 0 && !isViewMode">
+                                        <div 
+                                            class="suggestion-item"
+                                            *ngFor="let brand of filteredBrands"
+                                            (mousedown)="selectBrand(brand)"
+                                        >
+                                            {{ brand.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback" *ngIf="form.get('brandName')?.invalid && form.get('brandName')?.touched">
                                     Brand is required
                                 </div>
                             </div>
