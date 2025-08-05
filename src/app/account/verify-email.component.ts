@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
@@ -9,7 +10,11 @@ enum EmailStatus {
     Failed
 }
 
-@Component({ templateUrl: 'verify-email.component.html' })
+@Component({ 
+    templateUrl: 'verify-email.component.html',
+    standalone: true,
+    imports: [CommonModule, RouterModule]
+})
 export class VerifyEmailComponent implements OnInit {
     private route = inject(ActivatedRoute);
     private router = inject(Router);

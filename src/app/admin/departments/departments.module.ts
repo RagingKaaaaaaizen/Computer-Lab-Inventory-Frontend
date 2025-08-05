@@ -11,9 +11,7 @@ import { DepartmentsRoutingModule } from './departments-routing.module';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        DepartmentsRoutingModule
-    ],
-    declarations: [
+        DepartmentsRoutingModule,
         ListComponent,
         AddEditComponent
     ]

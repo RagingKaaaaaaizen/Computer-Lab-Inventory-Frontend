@@ -11,9 +11,7 @@ import { TransferModalComponent } from './transfer-modal/transfer-modal.componen
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        EmployeesRoutingModule
-    ],
-    declarations: [
+        EmployeesRoutingModule,
         ListComponent,
         AddEditComponent,
         TransferModalComponent

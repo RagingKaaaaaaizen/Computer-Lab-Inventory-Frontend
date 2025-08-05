@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
@@ -13,7 +15,11 @@ import {
   DepartmentService,
 } from '@app/_services';
 
-@Component({ templateUrl: 'add-edit.component.html' })
+@Component({ 
+  templateUrl: 'add-edit.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
+})
 export class AddEditComponent implements OnInit {
   private employeeService = inject(EmployeeService);
   private formBuilder = inject(UntypedFormBuilder);

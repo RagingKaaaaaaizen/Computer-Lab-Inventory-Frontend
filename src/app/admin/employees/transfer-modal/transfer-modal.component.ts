@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, switchMap } from 'rxjs/operators';
 import { EmployeeService } from '@app/_services/employee.service';
 import { DepartmentService } from '@app/_services/department.service';
@@ -9,8 +10,9 @@ import { Department } from '@app/_models/department';
 
 @Component({
   selector: 'app-transfer-modal',
-  templateUrl: './transfer-modal.component.html'
-  
+  templateUrl: './transfer-modal.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class TransferModalComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
@@ -19,7 +21,7 @@ export class TransferModalComponent implements OnInit {
   private alertService = inject(AlertService);
 
   @Input() employee: Employee;
-  @Output() closeModal = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
   @Output() transferComplete = new EventEmitter<void>();
 
   form: FormGroup;

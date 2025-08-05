@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
@@ -12,7 +13,11 @@ enum TokenStatus {
     Invalid
 }
 
-@Component({ templateUrl: 'reset-password.component.html' })
+@Component({ 
+    templateUrl: 'reset-password.component.html',
+    standalone: true,
+    imports: [CommonModule, RouterModule, ReactiveFormsModule]
+})
 export class ResetPasswordComponent implements OnInit {
     private formBuilder = inject(UntypedFormBuilder);
     private route = inject(ActivatedRoute);

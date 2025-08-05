@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { WorkflowService } from '@app/_services/workflow.service';
@@ -10,7 +11,9 @@ import { Employee } from '@app/_models/employee';
 
 @Component({
     selector: 'app-workflow-add-edit',
-    templateUrl: './add-edit.component.html'
+    templateUrl: './add-edit.component.html',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule]
 })
 export class AddEditComponent implements OnInit {
     private formBuilder = inject(FormBuilder);

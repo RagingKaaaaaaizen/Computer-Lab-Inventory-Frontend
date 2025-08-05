@@ -14,15 +14,13 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [
-    StockListComponent,
-    StockEditComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    StockListComponent,
+    StockEditComponent
   ]
 })
 export class StocksModule {}

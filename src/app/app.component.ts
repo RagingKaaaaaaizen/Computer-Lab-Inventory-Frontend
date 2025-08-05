@@ -1,11 +1,17 @@
 ﻿import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AccountService } from './_services';
 import { Account, Role } from './_models';
+import { AlertComponent } from './_components/alert.component';
+import { NavComponent } from './_components/nav.component';
 
 @Component({ 
   selector: 'app-root', 
   templateUrl: 'app.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, AlertComponent, NavComponent],
   styles: [`
     .app-container {
       min-height: 100vh;

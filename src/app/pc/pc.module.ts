@@ -10,9 +10,7 @@ import { PCAddEditComponent } from './pc-add-edit.component';
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        PCRoutingModule
-    ],
-    declarations: [
+        PCRoutingModule,
         PCListComponent,
         PCAddEditComponent
     ]

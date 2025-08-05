@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { StockService } from '../_services/stock.service';
 import { ItemService } from '../_services/item.service';
 import { StorageLocationService } from '../_services/storage-location.service';
@@ -7,7 +9,9 @@ import { Stock } from '../_models/stock';
 
 @Component({
   selector: 'app-stock-edit',
-  templateUrl: './stock-edit.component.html'
+  templateUrl: './stock-edit.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule]
 })
 export class StockEditComponent implements OnInit {
   private route = inject(ActivatedRoute);

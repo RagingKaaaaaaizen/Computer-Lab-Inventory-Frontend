@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WorkflowService } from '@app/_services/workflow.service';
 import { AlertService } from '@app/_services/alert.service';
 import { Workflow, WorkflowComment } from '@app/_models/workflow';
@@ -8,6 +9,8 @@ import { AccountService } from '@app/_services/account.service';
 
 @Component({
     selector: 'app-workflow-form',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule],
     template: `
         <div class="workflow-form">
             <h4>{{isEditMode ? 'Edit' : 'Create'}} Workflow</h4>

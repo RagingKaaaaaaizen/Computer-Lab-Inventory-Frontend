@@ -1,10 +1,13 @@
 ﻿import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { AccountService } from '@app/_services';
 import { Role } from '@app/_models';
 
 @Component({ 
   templateUrl: 'home.component.html',
+  standalone: true,
+  imports: [CommonModule],
   styles: [`
     .dashboard-container {
       padding: 20px 0;

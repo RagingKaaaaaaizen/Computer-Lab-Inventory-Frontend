@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -8,6 +9,8 @@ import { AlertService } from '@app/_services';
 @Component({ 
     selector: 'app-alert', 
     templateUrl: 'alert.component.html',
+    standalone: true,
+    imports: [CommonModule],
     styles: [`
         .alert {
             position: fixed;

@@ -1,4 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ItemService } from '../../_services/item.service';
@@ -9,6 +11,8 @@ import { AlertService } from '../../_services/alert.service';
 @Component({
   selector: 'app-item-add',
   templateUrl: './item-add.component.html',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   styles: [`
     .form-container {
       padding: 20px 0;

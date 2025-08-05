@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EmployeeService } from '@app/_services/employee.service';
@@ -10,8 +11,9 @@ import { Department } from '@app/_models/department';
 
 @Component({
   selector: 'app-employee-transfer',
-  templateUrl: './employee-transfer.component.html'
-  
+  templateUrl: './employee-transfer.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class EmployeeTransferComponent implements OnInit {
   private formBuilder = inject(FormBuilder);

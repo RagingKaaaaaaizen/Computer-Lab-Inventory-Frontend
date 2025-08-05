@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ItemService } from '../../_services/item.service';
@@ -10,6 +11,8 @@ import { AlertService } from '../../_services/alert.service';
 @Component({
   selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   styles: [`
     .form-container {
       padding: 20px 0;

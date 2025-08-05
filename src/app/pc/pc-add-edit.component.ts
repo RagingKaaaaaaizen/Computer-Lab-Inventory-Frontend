@@ -1,11 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { PCService, ItemService, StorageLocationService, AlertService } from '../_services';
 import { PC, SpecificationField } from '../_models/pc';
 
-@Component({ templateUrl: 'pc-add-edit.component.html' })
+@Component({ 
+    templateUrl: 'pc-add-edit.component.html',
+    standalone: true,
+    imports: [CommonModule, RouterModule, ReactiveFormsModule]
+})
 export class PCAddEditComponent implements OnInit {
     private formBuilder = inject(FormBuilder);
     private route = inject(ActivatedRoute);

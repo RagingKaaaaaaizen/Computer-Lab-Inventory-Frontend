@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { DisposeService, Dispose } from '../_services/dispose.service';
 import { ItemService } from '../_services/item.service';
 import { StorageLocationService } from '../_services/storage-location.service';
@@ -8,7 +9,9 @@ import { AlertService } from '../_services/alert.service';
 
 @Component({
   selector: 'app-dispose',
-  templateUrl: './dispose.component.html'
+  templateUrl: './dispose.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, ReactiveFormsModule]
 })
 export class DisposeComponent implements OnInit {
   private formBuilder = inject(FormBuilder);

@@ -116,7 +116,7 @@ export class WorkflowModalComponent implements OnInit {
     private alertService = inject(AlertService);
 
     @Input() employeeId: string;
-    @Output() closeModal = new EventEmitter<void>();
+    @Output() close = new EventEmitter<void>();
 
     workflows: Workflow[] = [];
     showForm = false;

@@ -1,13 +1,18 @@
 ﻿import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
 import { MustMatch } from '@app/_helpers';
 import { Role } from '@app/_models';
 
-@Component({ templateUrl: 'add-edit.component.html' })
+@Component({ 
+  templateUrl: 'add-edit.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
+})
 export class AddEditComponent implements OnInit {
     private formBuilder = inject(UntypedFormBuilder);
     private route = inject(ActivatedRoute);

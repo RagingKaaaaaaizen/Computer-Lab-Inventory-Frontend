@@ -1,9 +1,14 @@
 ﻿import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 import { AccountService } from '@app/_services';
 
-@Component({ templateUrl: 'layout.component.html' })
+@Component({ 
+    templateUrl: 'layout.component.html',
+    standalone: true,
+    imports: [CommonModule, RouterModule]
+})
 export class LayoutComponent {
     private router = inject(Router);
     private accountService = inject(AccountService);

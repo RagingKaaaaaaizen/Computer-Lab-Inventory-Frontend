@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { CategoryService } from '../../_services/category.service';
 import { ItemService } from '../../_services/item.service';
@@ -10,6 +12,8 @@ import { AccountService } from '../../_services/account.service';
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   styles: [`
     .list-container {
       padding: 20px 0;

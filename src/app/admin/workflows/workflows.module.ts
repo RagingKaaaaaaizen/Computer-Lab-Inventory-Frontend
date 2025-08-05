@@ -15,9 +15,7 @@ const routes: Routes = [
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes)
-    ],
-    declarations: [
+        RouterModule.forChild(routes),
         ListComponent,
         AddEditComponent
     ]

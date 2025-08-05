@@ -14,15 +14,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    DisposeComponent,
-    DisposeListComponent
-  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    DisposeComponent,
+    DisposeListComponent
   ]
 })
 export class DisposeModule { } 

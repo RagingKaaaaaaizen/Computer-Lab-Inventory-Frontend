@@ -1,4 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { BrandService } from '../../_services/brand.service';
@@ -10,6 +12,8 @@ import { AccountService } from '../../_services/account.service';
 @Component({
   selector: 'app-brand-list',
   templateUrl: './brand-list.component.html',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   styles: [`
     .list-container {
       padding: 20px 0;

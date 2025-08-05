@@ -1,11 +1,14 @@
 ﻿import { Component, OnInit, inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { first, finalize } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
 
 @Component({ 
     templateUrl: 'forgot-password.component.html',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule],
     styles: [`
         .auth-container {
             min-height: 100vh;

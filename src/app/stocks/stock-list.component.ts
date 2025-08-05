@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService, StockService, ItemService, CategoryService, BrandService, StorageLocationService } from '@app/_services';
@@ -8,6 +10,8 @@ import { Role } from '@app/_models';
 @Component({
   selector: 'app-stock-list',
   templateUrl: './stock-list.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   styles: [`
     .list-container {
       padding: 20px 0;

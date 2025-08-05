@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { DisposeService, Dispose } from '../_services/dispose.service';
@@ -9,6 +11,8 @@ import { Role } from '../_models';
 @Component({
   selector: 'app-dispose-list',
   templateUrl: './dispose-list.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   styles: [`
     .list-container {
       padding: 20px 0;

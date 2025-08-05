@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home';
 import { AuthGuard } from './_helpers';
@@ -14,7 +13,7 @@ const stocksModule = () => import('./stocks/stocks.module').then(x => x.StocksMo
 const pcModule = () => import('./pc/pc.module').then(x => x.PCModule);
 const disposeModule = () => import('./dispose/dispose.module').then(x => x.DisposeModule);
 
-const routes: Routes = [
+export const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: accountModule },
     { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
@@ -27,10 +26,3 @@ const routes: Routes = [
 
     { path: '**', redirectTo: '' }
 ];
-
-
-@NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule] 
-})      
-export class AppRoutingModule { }

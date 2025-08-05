@@ -17,9 +17,7 @@ import { WorkflowModalComponent } from './employees/workflow-modal.component';
         CommonModule,
         ReactiveFormsModule,
         AdminRoutingModule,
-        RouterModule
-    ],
-    declarations: [
+        RouterModule,
         SubNavComponent,
         LayoutComponent,
         OverviewComponent,

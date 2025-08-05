@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { PCService } from '../_services';
 import { PC } from '../_models/pc';
@@ -9,6 +11,8 @@ import { AccountService } from '../_services';
 
 @Component({ 
   templateUrl: 'pc-list.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   styles: [`
     .list-container {
       padding: 20px 0;

@@ -1,4 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { CategoryService } from '../_services/category.service';
 import { ItemService } from '../_services/item.service';
@@ -9,6 +11,8 @@ import { AlertService } from '../_services/alert.service';
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   styles: [`
     .overview-container {
       padding: 20px 0;

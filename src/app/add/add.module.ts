@@ -18,7 +18,11 @@ import { StorageLocationAddComponent } from './storage-location/storage-location
 import { OverviewComponent } from './overview.component';
 
 @NgModule({
-  declarations: [
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AddRoutingModule,
     OverviewComponent,
     CategoryListComponent,
     CategoryEditComponent,
@@ -30,12 +34,6 @@ import { OverviewComponent } from './overview.component';
     StorageLocationListComponent,
     StorageLocationEditComponent,
     StorageLocationAddComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AddRoutingModule
   ]
 })
 export class AddModule {}

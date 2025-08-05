@@ -9,9 +9,7 @@ import { ListComponent } from './list.component';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        RequestsRoutingModule
-    ],
-    declarations: [
+        RequestsRoutingModule,
         ListComponent
     ]
 })
