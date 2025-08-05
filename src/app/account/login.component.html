@@ -10,88 +10,161 @@
         </div>
 
         <!-- Login Form -->
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <form [formGroup]="form" 
+              (ngSubmit)="onSubmit()" 
+              class="auth-form"
+              role="form"
+              [attr.aria-label]="'Login form'">
             <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-envelope"></i>
+                <label class="form-label" for="email-input">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
                     Email Address
+                    <span class="required-indicator" aria-label="Required field">*</span>
                 </label>
                 <input 
+                    id="email-input"
                     type="email" 
                     formControlName="email" 
                     class="form-control" 
                     placeholder="Enter your email"
-                    [ngClass]="{ 'is-invalid': submitted && f.email.errors }" 
+                    [ngClass]="{ 
+                        'is-invalid': (submitted && f.email.errors) || (f.email.dirty && f.email.errors),
+                        'is-valid': f.email.valid && f.email.dirty
+                    }"
+                    [attr.aria-describedby]="f.email.errors ? 'email-error' : null"
+                    [attr.aria-invalid]="f.email.errors ? 'true' : 'false'"
+                    autocomplete="email"
+                    required
                 />
-                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                    <div *ngIf="f.email.errors.required">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Email is required
+                <div class="form-feedback">
+                    <div *ngIf="(submitted && f.email.errors) || (f.email.dirty && f.email.errors)" 
+                         class="invalid-feedback" 
+                         id="email-error"
+                         role="alert"
+                         aria-live="polite">
+                        <div *ngIf="f.email.errors?.['required']">
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                            Email address is required
+                        </div>
+                        <div *ngIf="f.email.errors?.['email']">
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                            Please enter a valid email address
+                        </div>
                     </div>
-                    <div *ngIf="f.email.errors.email">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Please enter a valid email address
+                    <div *ngIf="f.email.valid && f.email.dirty" 
+                         class="valid-feedback">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                        Valid email address
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-lock"></i>
+                <label class="form-label" for="password-input">
+                    <i class="fas fa-lock" aria-hidden="true"></i>
                     Password
+                    <span class="required-indicator" aria-label="Required field">*</span>
                 </label>
                 <div class="password-input-group">
                     <input 
+                        id="password-input"
                         [type]="showPassword ? 'text' : 'password'" 
                         formControlName="password" 
                         class="form-control" 
                         placeholder="Enter your password"
-                        [ngClass]="{ 'is-invalid': submitted && f.password.errors }" 
+                        [ngClass]="{ 
+                            'is-invalid': (submitted && f.password.errors) || (f.password.dirty && f.password.errors),
+                            'is-valid': f.password.valid && f.password.dirty
+                        }"
+                        [attr.aria-describedby]="f.password.errors ? 'password-error' : 'password-help'"
+                        [attr.aria-invalid]="f.password.errors ? 'true' : 'false'"
+                        autocomplete="current-password"
+                        required
                     />
                     <button 
                         type="button" 
                         class="password-toggle" 
                         (click)="togglePassword()"
                         [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                        [attr.aria-pressed]="showPassword"
+                        tabindex="0"
                     >
-                        <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                        <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Password is required
+                <div class="form-feedback">
+                    <div *ngIf="(submitted && f.password.errors) || (f.password.dirty && f.password.errors)" 
+                         class="invalid-feedback" 
+                         id="password-error"
+                         role="alert"
+                         aria-live="polite">
+                        <div *ngIf="f.password.errors?.['required']">
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                            Password is required
+                        </div>
+                        <div *ngIf="f.password.errors?.['minlength']">
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                            Password must be at least {{f.password.errors?.['minlength'].requiredLength}} characters
+                        </div>
                     </div>
+                    <div *ngIf="f.password.valid && f.password.dirty" 
+                         class="valid-feedback">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                        Valid password
+                    </div>
+                    <small id="password-help" class="form-text">
+                        Enter your account password to sign in
+                    </small>
                 </div>
             </div>
 
             <div class="form-group">
                 <button 
-                    [disabled]="loading" 
+                    [disabled]="loading || form.invalid" 
                     class="btn btn-primary btn-block auth-btn"
                     type="submit"
+                    [attr.aria-label]="loading ? 'Signing in, please wait' : 'Sign in to your account'"
+                    [attr.aria-describedby]="error ? 'login-error' : null"
                 >
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    <i *ngIf="!loading" class="fas fa-sign-in-alt me-2"></i>
+                    <span *ngIf="loading" 
+                          class="spinner-border spinner-border-sm me-2" 
+                          role="status" 
+                          aria-hidden="true"></span>
+                    <i *ngIf="!loading" class="fas fa-sign-in-alt me-2" aria-hidden="true"></i>
                     {{ loading ? 'Signing In...' : 'Sign In' }}
                 </button>
+                <div class="form-help-text" *ngIf="form.invalid && !loading">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        Please fill in all required fields correctly
+                    </small>
+                </div>
             </div>
 
-            <div class="auth-links">
-                <a routerLink="../register" class="auth-link">
-                    <i class="fas fa-user-plus"></i>
+            <div class="auth-links" role="navigation" [attr.aria-label]="'Account actions'">
+                <a routerLink="../register" 
+                   class="auth-link"
+                   [attr.aria-label]="'Create a new account'">
+                    <i class="fas fa-user-plus" aria-hidden="true"></i>
                     Create Account
                 </a>
-                <a routerLink="../forgot-password" class="auth-link">
-                    <i class="fas fa-key"></i>
+                <a routerLink="../forgot-password" 
+                   class="auth-link"
+                   [attr.aria-label]="'Reset your password'">
+                    <i class="fas fa-key" aria-hidden="true"></i>
                     Forgot Password?
                 </a>
             </div>
         </form>
 
         <!-- Error Message -->
-        <div *ngIf="error" class="alert alert-danger auth-error">
-            <i class="fas fa-exclamation-triangle"></i>
+        <div *ngIf="error" 
+             class="alert alert-danger auth-error" 
+             id="login-error"
+             role="alert" 
+             aria-live="assertive"
+             [attr.aria-label]="'Login error: ' + error">
+            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
             {{ error }}
         </div>
     </div>

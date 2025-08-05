@@ -1,17 +1,19 @@
-﻿import { Component, inject } from '@angular/core';
+﻿import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { AccountService } from './_services';
+import { AccountService, ConfirmationService } from './_services';
 import { Account, Role } from './_models';
 import { AlertComponent } from './_components/alert.component';
 import { NavComponent } from './_components/nav.component';
+import { ConfirmationDialogComponent, ConfirmationData } from './_components/confirmation-dialog.component';
 
 @Component({ 
   selector: 'app-root', 
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [CommonModule, RouterModule, AlertComponent, NavComponent],
+  imports: [CommonModule, RouterModule, AlertComponent, NavComponent, ConfirmationDialogComponent],
   styles: [`
     .app-container {
       min-height: 100vh;
@@ -318,6 +320,68 @@ import { NavComponent } from './_components/nav.component';
       font-size: 1rem;
     }
 
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #000;
+      color: white;
+      padding: 8px;
+      border-radius: 4px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.3s;
+    }
+
+    .skip-to-main:focus {
+      top: 6px;
+    }
+
+    /* Screen reader only text */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Focus indicators */
+    *:focus {
+      outline: 2px solid #667eea;
+      outline-offset: 2px;
+    }
+
+    .mobile-menu-btn:focus {
+      outline: 3px solid #ffd700;
+      outline-offset: 2px;
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .card {
+        border: 2px solid #000;
+      }
+      
+      .btn {
+        border: 2px solid currentColor;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     /* Responsive utilities */
     @media (max-width: 768px) {
       .container {
@@ -338,14 +402,33 @@ import { NavComponent } from './_components/nav.component';
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
     private accountService = inject(AccountService);
+    private confirmationService = inject(ConfirmationService);
 
     Role = Role;
     account: Account;
+    isMobileMenuOpen = false;
+    
+    // Confirmation dialog properties
+    showConfirmationDialog = false;
+    confirmationData: ConfirmationData = { title: '', message: '' };
+    private confirmationSubscription: Subscription;
+    private currentConfirmationResolve: ((result: boolean) => void) | null = null;
 
     constructor() {
         this.accountService.account.subscribe(x => this.account = x);
+        
+        // Subscribe to confirmation requests
+        this.confirmationSubscription = this.confirmationService.confirmation$.subscribe(request => {
+            this.confirmationData = request.data;
+            this.currentConfirmationResolve = request.resolve;
+            this.showConfirmationDialog = true;
+        });
+    }
+
+    ngOnDestroy() {
+        this.confirmationSubscription?.unsubscribe();
     }
     
     toggleMobileMenu() {
@@ -353,7 +436,23 @@ export class AppComponent {
         const navComponent = document.querySelector('app-nav') as any;
         if (navComponent && navComponent.toggleMobileSidebar) {
             navComponent.toggleMobileSidebar();
+            this.isMobileMenuOpen = !this.isMobileMenuOpen;
         }
+    }
+    
+    focusMainContent() {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.focus();
+        }
+    }
+    
+    onConfirmationResult(result: boolean) {
+        if (this.currentConfirmationResolve) {
+            this.currentConfirmationResolve(result);
+            this.currentConfirmationResolve = null;
+        }
+        this.showConfirmationDialog = false;
     }
     
     logout() {

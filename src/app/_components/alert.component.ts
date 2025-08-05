@@ -65,8 +65,59 @@ import { AlertService } from '@app/_services';
             opacity: .5;
             cursor: pointer;
         }
+        .close {
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            margin-left: 10px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
         .close:hover {
             opacity: .75;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .close:focus {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+        
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .alert-message {
+            flex: 1;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .alert {
+                animation: none;
+            }
+            .alert.fade {
+                animation: none;
+            }
         }
     `]
 })
@@ -155,5 +206,20 @@ export class AlertComponent implements OnInit, OnDestroy {
         }
 
         return classes.join(' ');
+    }
+    
+    trackAlert(index: number, alert: Alert): any {
+        return alert.id || index;
+    }
+    
+    getAlertIcon(alertType: AlertType): string {
+        const iconMap = {
+            [AlertType.Success]: 'fas fa-check-circle',
+            [AlertType.Error]: 'fas fa-exclamation-triangle',
+            [AlertType.Info]: 'fas fa-info-circle',
+            [AlertType.Warning]: 'fas fa-exclamation-circle'
+        };
+        
+        return iconMap[alertType] || 'fas fa-info-circle';
     }
 }

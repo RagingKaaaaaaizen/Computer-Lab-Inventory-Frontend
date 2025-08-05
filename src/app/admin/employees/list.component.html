@@ -1,51 +1,193 @@
-<h1>Employees</h1>
-<p>All employees from secure (admin only) api end point:</p>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Employee</a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width:8%">ID</th>
-            <th style="width:12%">Employee ID</th>
-            <th style="width:18%">User</th>
-            <th style="width:15%">Position</th>
-            <th style="width:15%">Department</th>
-            <th style="width:12%">Hire Date</th>
-            <th style="width:10%">Status</th>
-            <th style="width:20%">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let employee of employees">
-            <td>{{employee.id}}</td>
-            <td>{{employee.employeeId}}</td>
-            <td>{{employee.account?.email || 'No Account'}}</td>
-            <td>{{employee.position}}</td>
-            <td>{{employee.department?.name || 'No Department'}}</td>
-            <td>{{employee.hireDate | date:'MM/dd/yyyy'}}</td>
-            <td [class.text-primary]="employee.isActive" [class.text-danger]="!employee.isActive">
-                {{employee.isActive ? 'Active' : 'InActive' }}
-            </td>
-            <td>
-                <div style="display: flex; gap: .5em; justify-content: flex-start; white-space: nowrap">
-                    <a routerLink="" class="btn btn-sm btn-secondary">Request</a>
-                    <button (click)="openWorkflowModal(employee)" class="btn btn-sm btn-success">Workflow</button>
-                    <button (click)="openTransferModal(employee)" class="btn btn-sm btn-info">Transfer</button>
-                    <a [routerLink]="['edit', employee.id]" class="btn btn-sm btn-primary">
-                        <i class="fas fa-pencil-alt me-1"></i>Edit
+<div class="list-container">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <h1 class="page-title">Employee Management</h1>
+                        <p class="page-subtitle">Manage employee information and assignments</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a routerLink="add" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Employee
                     </a>
-                    <button class="btn btn-sm btn-danger" (click)="deleteEmployee(employee.id)" [disabled]="isDeleting">
-                        <i class="fas fa-trash me-1"></i>Delete
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" *ngIf="employees">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number">{{ employees.length }}</div>
+                <div class="stat-label">Total Employees</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-number">{{ getActiveEmployeesCount() }}</div>
+                <div class="stat-label">Active Employees</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="stat-number">{{ getInactiveEmployeesCount() }}</div>
+                <div class="stat-label">Inactive Employees</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="stat-number">{{ getDepartmentCount() }}</div>
+                <div class="stat-label">Departments</div>
+            </div>
+        </div>
+
+        <!-- Employee Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Employee Directory</h5>
+                <div class="table-actions">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
                     </button>
                 </div>
-            </td>
-        </tr>
-        <tr *ngIf="!employees">
-            <td colspan="8" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" 
+                           role="table" 
+                           [attr.aria-label]="'Employee directory table'">
+                        <thead>
+                            <tr role="row">
+                                <th scope="col"><i class="fas fa-hashtag"></i> ID</th>
+                                <th scope="col"><i class="fas fa-id-card"></i> Employee ID</th>
+                                <th scope="col"><i class="fas fa-user"></i> User</th>
+                                <th scope="col"><i class="fas fa-briefcase"></i> Position</th>
+                                <th scope="col"><i class="fas fa-building"></i> Department</th>
+                                <th scope="col"><i class="fas fa-calendar"></i> Hire Date</th>
+                                <th scope="col"><i class="fas fa-toggle-on"></i> Status</th>
+                                <th scope="col"><i class="fas fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let employee of employees; trackBy: trackEmployee" 
+                                class="employee-row"
+                                role="row">
+                                <td>
+                                    <span class="employee-id-badge">{{employee.id}}</span>
+                                </td>
+                                <td>
+                                    <span class="employee-number">{{employee.employeeId}}</span>
+                                </td>
+                                <td>
+                                    <div class="user-info">
+                                        <strong>{{employee.account?.email || 'No Account'}}</strong>
+                                        <small class="d-block text-muted" *ngIf="employee.account?.firstName && employee.account?.lastName">
+                                            {{employee.account?.firstName}} {{employee.account?.lastName}}
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="position-badge">{{employee.position}}</span>
+                                </td>
+                                <td>
+                                    <span class="department-badge">{{employee.department?.name || 'No Department'}}</span>
+                                </td>
+                                <td>
+                                    <span class="hire-date">{{employee.hireDate | date:'MMM dd, yyyy'}}</span>
+                                </td>
+                                <td>
+                                    <span class="status-badge" 
+                                          [ngClass]="{
+                                            'badge-success': employee.isActive,
+                                            'badge-danger': !employee.isActive
+                                          }"
+                                          [attr.aria-label]="employee.isActive ? 'Active employee' : 'Inactive employee'">
+                                        <i [class]="employee.isActive ? 'fas fa-check-circle' : 'fas fa-times-circle'" 
+                                           aria-hidden="true"></i>
+                                        {{employee.isActive ? 'Active' : 'Inactive'}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-secondary"
+                                                routerLink=""
+                                                [attr.aria-label]="'Create request for ' + (employee.account?.email || 'employee')"
+                                                title="Create Request">
+                                            <i class="fas fa-file-alt"></i>
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-success"
+                                                (click)="openWorkflowModal(employee)"
+                                                [attr.aria-label]="'Manage workflow for ' + (employee.account?.email || 'employee')"
+                                                title="Manage Workflow">
+                                            <i class="fas fa-project-diagram"></i>
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-info"
+                                                (click)="openTransferModal(employee)"
+                                                [attr.aria-label]="'Transfer ' + (employee.account?.email || 'employee')"
+                                                title="Transfer Employee">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </button>
+                                        <a [routerLink]="['edit', employee.id]" 
+                                           class="btn btn-sm btn-outline-warning"
+                                           [attr.aria-label]="'Edit ' + (employee.account?.email || 'employee')"
+                                           title="Edit Employee">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                (click)="deleteEmployee(employee.id)" 
+                                                [disabled]="isDeleting"
+                                                [attr.aria-label]="'Delete ' + (employee.account?.email || 'employee')"
+                                                title="Delete Employee">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="!employees" role="row">
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="loading-state">
+                                        <span class="spinner-border spinner-border-lg" 
+                                              role="status" 
+                                              aria-label="Loading employees"></span>
+                                        <p class="mt-2">Loading employees...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="employees && employees.length === 0" role="row">
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users-slash"></i>
+                                        <h4>No employees found</h4>
+                                        <p>Start by adding your first employee</p>
+                                        <a routerLink="add" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i>
+                                            Add Employee
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <app-transfer-modal
     *ngIf="showTransferModal"

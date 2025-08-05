@@ -328,6 +328,7 @@ export class StockListComponent implements OnInit {
   selectedCategory = '';
   currentPage = 1;
   itemsPerPage = 10;
+  loading = false;
   Math = Math;
 
   ngOnInit() {
@@ -335,6 +336,7 @@ export class StockListComponent implements OnInit {
   }
 
   loadData() {
+    this.loading = true;
     this.loadStocks();
     this.loadItems();
     this.loadCategories();
@@ -349,9 +351,11 @@ export class StockListComponent implements OnInit {
         next: (stocks) => {
           this.stocks = stocks;
           this.applyFilters();
+          this.loading = false;
         },
         error: error => {
           this.alertService.error(error);
+          this.loading = false;
         }
       });
   }
@@ -446,11 +450,6 @@ export class StockListComponent implements OnInit {
 
   onFilterChange() {
     this.applyFilters();
-  }
-
-  refreshData() {
-    this.loadData();
-    this.alertService.success('Data refreshed successfully');
   }
 
   getAdditionsCount(): number {
@@ -581,5 +580,18 @@ export class StockListComponent implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
     }
+  }
+
+  trackStock(index: number, stock: any): any {
+    return stock.id || index;
+  }
+
+  refreshData() {
+    this.loading = true;
+    this.loadData();
+    // Set loading to false after a short delay to show the loading state
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   }
 }

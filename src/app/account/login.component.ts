@@ -209,6 +209,76 @@ import { AccountService, AlertService } from '@app/_services';
             font-size: 0.8rem;
         }
 
+        .valid-feedback {
+            display: block;
+            color: #28a745;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .valid-feedback i {
+            font-size: 0.8rem;
+        }
+
+        .form-feedback {
+            min-height: 24px;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        .form-control.is-valid:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .form-control.is-invalid:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .required-indicator {
+            color: #dc3545;
+            margin-left: 3px;
+            font-weight: bold;
+        }
+
+        .form-text {
+            margin-top: 5px;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .form-help-text {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Accessibility improvements */
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .password-toggle:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .auth-card {
