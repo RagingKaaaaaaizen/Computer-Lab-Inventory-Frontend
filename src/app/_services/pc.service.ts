@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -6,9 +6,9 @@ import { PC, SpecificationField } from '../_models/pc';
 
 @Injectable({ providedIn: 'root' })
 export class PCService {
-    private baseUrl = `${environment.apiUrl}/api/pcs`;
+    private http = inject(HttpClient);
 
-    constructor(private http: HttpClient) {}
+    private baseUrl = `${environment.apiUrl}/api/pcs`;
 
     getAll(): Observable<PC[]> {
         return this.http.get<PC[]>(this.baseUrl);

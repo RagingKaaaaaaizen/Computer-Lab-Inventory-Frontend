@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { PCService } from '../_services';
@@ -301,6 +301,12 @@ import { AccountService } from '../_services';
   `]
 })
 export class PCListComponent implements OnInit {
+  private pcService = inject(PCService);
+  private categoryService = inject(CategoryService);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
+  accountService = inject(AccountService);
+
   Role = Role;
   pcs: PC[] = [];
   filteredPCs: PC[] = [];
@@ -312,14 +318,6 @@ export class PCListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   Math = Math;
-
-  constructor(
-    private pcService: PCService,
-    private categoryService: CategoryService,
-    private router: Router,
-    private alertService: AlertService,
-    public accountService: AccountService
-  ) { }
 
   ngOnInit() {
     this.loadData();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -7,6 +7,14 @@ import { PC, SpecificationField } from '../_models/pc';
 
 @Component({ templateUrl: 'pc-add-edit.component.html' })
 export class PCAddEditComponent implements OnInit {
+    private formBuilder = inject(FormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private pcService = inject(PCService);
+    private itemService = inject(ItemService);
+    private storageLocationService = inject(StorageLocationService);
+    private alertService = inject(AlertService);
+
     form: FormGroup;
     id: number;
     isAddMode: boolean;
@@ -17,16 +25,6 @@ export class PCAddEditComponent implements OnInit {
     roomLocations: any[] = [];
     specificationFields: SpecificationField[] = [];
     selectedItem: any = null;
-
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private pcService: PCService,
-        private itemService: ItemService,
-        private storageLocationService: StorageLocationService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];

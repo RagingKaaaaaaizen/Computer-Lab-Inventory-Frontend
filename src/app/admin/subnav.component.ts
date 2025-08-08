@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AccountService } from '@app/_services';
 import { Role } from '@app/_models';
 
 @Component({ templateUrl: 'subnav.component.html' })
 export class SubNavComponent {
-    Role = Role;
+    accountService = inject(AccountService);
 
-    constructor(public accountService: AccountService) { }
+    Role = Role;
 
     hasRole(roles: Role[]): boolean {
         const account = this.accountService.accountValue;

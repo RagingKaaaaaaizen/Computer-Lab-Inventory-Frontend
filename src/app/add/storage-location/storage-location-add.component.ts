@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { StorageLocationService } from '../../_services/storage-location.service';
@@ -238,15 +238,13 @@ import { AlertService } from '../../_services/alert.service';
   `]
 })
 export class StorageLocationAddComponent {
+  private storageLocationService = inject(StorageLocationService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
+
   model: any = {};
   loading = false;
   submitted = false;
-
-  constructor(
-    private storageLocationService: StorageLocationService,
-    private alertService: AlertService,
-    private router: Router
-  ) {}
 
   saveLocation() {
     this.submitted = true;

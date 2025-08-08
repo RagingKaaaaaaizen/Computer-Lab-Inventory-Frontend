@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
@@ -8,7 +8,8 @@ const baseUrl = `${environment.apiUrl}/api/stocks`;
 
 @Injectable({ providedIn: 'root' })
 export class StockService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   getAll(): Observable<Stock[]> {
     return this.http.get<Stock[]>(baseUrl);

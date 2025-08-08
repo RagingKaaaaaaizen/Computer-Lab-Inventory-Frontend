@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 
 import { AccountService } from '@app/_services';
 import { Role } from '@app/_models';
@@ -184,10 +184,10 @@ import { Role } from '@app/_models';
   `]
 })
 export class HomeComponent {
+    private accountService = inject(AccountService);
+
     Role = Role;
     account = this.accountService.accountValue;
-
-    constructor(private accountService: AccountService) { }
 
     hasRole(roles: Role[]): boolean {
         const account = this.accountService.accountValue;

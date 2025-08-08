@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { StorageLocationService } from '../../_services/storage-location.service';
@@ -318,6 +318,12 @@ import { AccountService } from '../../_services/account.service';
   `]
 })
 export class StorageLocationListComponent implements OnInit {
+  private storageLocationService = inject(StorageLocationService);
+  private itemService = inject(ItemService);
+  private alertService = inject(AlertService);
+  accountService = inject(AccountService);
+  private router = inject(Router);
+
   Role = Role;
   locations: any[] = [];
   filteredLocations: any[] = [];
@@ -328,14 +334,6 @@ export class StorageLocationListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   Math = Math;
-
-  constructor(
-    private storageLocationService: StorageLocationService,
-    private itemService: ItemService,
-    private alertService: AlertService,
-    public accountService: AccountService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.loadData();
