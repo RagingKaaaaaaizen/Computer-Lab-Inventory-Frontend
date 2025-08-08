@@ -500,7 +500,12 @@ For support and questions:
 - **v1.1.0** - Added role-based access control
 - **v1.2.0** - Enhanced audit logging
 - **v1.3.0** - Improved UI/UX design
-
 ---
 
 **Built with ❤️ by the Enterprise Inventory Management Team** 
+
+
+
+
+
+
