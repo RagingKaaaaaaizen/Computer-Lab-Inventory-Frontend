@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 
 import { AccountService } from '@app/_services';
 
@@ -375,7 +375,7 @@ import { AccountService } from '@app/_services';
     `]
 })
 export class DetailsComponent {
-    account = this.accountService.accountValue;
+    private accountService = inject(AccountService);
 
-    constructor(private accountService: AccountService) { }
+    account = this.accountService.accountValue;
 }

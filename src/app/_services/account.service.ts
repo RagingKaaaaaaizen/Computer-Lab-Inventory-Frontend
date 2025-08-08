@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -11,13 +11,13 @@ const baseUrl = `${environment.apiUrl}/api/accounts`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+    private router = inject(Router);
+    private http = inject(HttpClient);
+
     private accountSubject: BehaviorSubject<Account | null>;
     public account: Observable<Account | null>;
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
+    constructor() {
         this.accountSubject = new BehaviorSubject<Account | null>(null);
         this.account = this.accountSubject.asObservable();
     }

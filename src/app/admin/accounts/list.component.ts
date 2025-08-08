@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -7,9 +7,10 @@ import { Account } from '@app/_models';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
-    accounts: any[];
+    private accountService = inject(AccountService);
+    private router = inject(Router);
 
-    constructor(private accountService: AccountService, private router: Router) {}
+    accounts: any[];
 
 
     ngOnInit() {

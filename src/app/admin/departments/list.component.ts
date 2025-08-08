@@ -1,17 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { Account } from "@app/_models";
 import { DepartmentService, EmployeeService } from '@app/_services'
 import { first } from "rxjs/operators";
 
 @Component({ templateUrl: 'list.component.html'})
-export class ListComponent{
+export class ListComponent implements OnInit {
+  private departmentService = inject(DepartmentService);
+  private employeeService = inject(EmployeeService);
+
   departments: any[]
   employeeCounts: { [key: string]: number } = {};
-
-  constructor(
-    private departmentService: DepartmentService,
-    private employeeService: EmployeeService
-  ){ }
 
   ngOnInit(){
     // Get all departments

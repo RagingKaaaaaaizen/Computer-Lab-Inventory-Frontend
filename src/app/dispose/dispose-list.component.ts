@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -313,6 +313,13 @@ import { Role } from '../_models';
   `]
 })
 export class DisposeListComponent implements OnInit {
+  private disposeService = inject(DisposeService);
+  private categoryService = inject(CategoryService);
+  private locationService = inject(StorageLocationService);
+  private router = inject(Router);
+  private accountService = inject(AccountService);
+  private alertService = inject(AlertService);
+
   Role = Role;
   disposals: Dispose[] = [];
   filteredDisposals: Dispose[] = [];
@@ -326,15 +333,6 @@ export class DisposeListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   Math = Math;
-
-  constructor(
-    private disposeService: DisposeService,
-    private categoryService: CategoryService,
-    private locationService: StorageLocationService,
-    private router: Router,
-    private accountService: AccountService,
-    private alertService: AlertService
-  ) {}
 
   ngOnInit(): void {
     this.loadData();

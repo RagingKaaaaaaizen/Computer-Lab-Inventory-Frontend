@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -14,21 +14,19 @@ import { Department } from '@app/_models/department';
   
 })
 export class EmployeeTransferComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private employeeService = inject(EmployeeService);
+  private departmentService = inject(DepartmentService);
+  private alertService = inject(AlertService);
+
   form: FormGroup;
   loading = false;
   submitted = false;
   employees: Employee[] = [];
   departments: Department[] = [];
   selectedEmployee: Employee;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private employeeService: EmployeeService,
-    private departmentService: DepartmentService,
-    private alertService: AlertService
-  ) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({

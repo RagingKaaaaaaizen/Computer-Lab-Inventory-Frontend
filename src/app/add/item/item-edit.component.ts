@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -263,6 +263,14 @@ import { AlertService } from '../../_services/alert.service';
   `]
 })
 export class ItemEditComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private itemService = inject(ItemService);
+  private categoryService = inject(CategoryService);
+  private brandService = inject(BrandService);
+  private alertService = inject(AlertService);
+
   form: FormGroup;
   id: number;
   isViewMode: boolean;
@@ -271,16 +279,6 @@ export class ItemEditComponent implements OnInit {
   categories: any[] = [];
   brands: any[] = [];
   title: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private itemService: ItemService,
-    private categoryService: CategoryService,
-    private brandService: BrandService,
-    private alertService: AlertService
-  ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];

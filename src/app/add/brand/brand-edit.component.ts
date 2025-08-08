@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -245,20 +245,18 @@ import { AlertService } from '../../_services/alert.service';
   `]
 })
 export class BrandEditComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private brandService = inject(BrandService);
+  private alertService = inject(AlertService);
+
   form: FormGroup;
   id: number;
   isViewMode: boolean;
   loading = false;
   submitted = false;
   title: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private brandService: BrandService,
-    private alertService: AlertService
-  ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];

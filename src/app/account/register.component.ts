@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -266,20 +266,18 @@ import { MustMatch } from '@app/_helpers';
     `]
 })
 export class RegisterComponent implements OnInit {
+    private formBuilder = inject(UntypedFormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private accountService = inject(AccountService);
+    private alertService = inject(AlertService);
+
     form: UntypedFormGroup;
     loading = false;
     submitted = false;
     showPassword = false;
     showConfirmPassword = false;
     error = '';
-    
-    constructor(
-        private formBuilder: UntypedFormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private accountService: AccountService,
-        private alertService: AlertService
-    ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({

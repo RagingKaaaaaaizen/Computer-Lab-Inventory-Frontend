@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, switchMap } from 'rxjs/operators';
 import { EmployeeService } from '@app/_services/employee.service';
@@ -13,21 +13,19 @@ import { Department } from '@app/_models/department';
   
 })
 export class TransferModalComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private employeeService = inject(EmployeeService);
+  private departmentService = inject(DepartmentService);
+  private alertService = inject(AlertService);
+
   @Input() employee: Employee;
-  @Output() close = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
   @Output() transferComplete = new EventEmitter<void>();
 
   form: FormGroup;
   loading = false;
   submitted = false;
   departments: Department[] = [];
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private employeeService: EmployeeService,
-    private departmentService: DepartmentService,
-    private alertService: AlertService
-  ) { }
 
   ngOnInit() {
     if (!this.employee || !this.employee.id) {

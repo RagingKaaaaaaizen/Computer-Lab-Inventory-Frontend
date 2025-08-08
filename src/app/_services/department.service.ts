@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -13,13 +13,12 @@ const baseUrl = `${environment.apiUrl}/api/departments`;
 
 @Injectable({ providedIn: 'root' })
 export class DepartmentService{
+  private http = inject(HttpClient);
+
   private departmentSubject: BehaviorSubject<Department>;
   public department: Observable<Department>;
 
-  constructor(
-    // private router: Router,
-    private http: HttpClient,
-  ){
+  constructor(){
     this.departmentSubject = new BehaviorSubject<Department>(new Department());
     this.department = this.departmentSubject.asObservable()
   }

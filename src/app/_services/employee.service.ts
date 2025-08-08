@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { environment } from '@environments/environment';
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { map, finalize, catchError, switchMap } from "rxjs/operators";
@@ -10,13 +10,11 @@ const baseUrl = `${environment.apiUrl}/api/employees`;
 
 @Injectable({ providedIn: 'root'})
 export class EmployeeService{
+  private http = inject(HttpClient);
+  private alertService = inject(AlertService);
+
   private employeeSubject: BehaviorSubject<Employee | null> = new BehaviorSubject<Employee | null>(null);
   public employee: Observable<Employee | null> = this.employeeSubject.asObservable();
-  
-  constructor(
-    private http: HttpClient,
-    private alertService: AlertService
-  ) { }
 
   private handleError(error: HttpErrorResponse) {
     this.alertService.error('An error occurred', { autoClose: false });

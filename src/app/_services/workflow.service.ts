@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,9 +8,9 @@ import { Workflow } from '@app/_models/workflow';
 
 @Injectable({ providedIn: 'root' })
 export class WorkflowService {
-    private baseUrl = `${environment.apiUrl}/api/workflows`;
+    private http = inject(HttpClient);
 
-    constructor(private http: HttpClient) { }
+    private baseUrl = `${environment.apiUrl}/api/workflows`;
 
     getAll(): Observable<Workflow[]> {
         return this.http.get<Workflow[]>(this.baseUrl)
